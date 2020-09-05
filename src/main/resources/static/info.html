@@ -1,0 +1,136 @@
+<html>
+	<link rel="stylesheet" type="text/css" href="js/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="js/easyui/themes/icon.css">
+	<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+td { font-size: 12px }
+th {
+     font-size: 12px;
+}
+body {
+	margin-left: 10px;
+}
+</style>
+
+<script type="text/javascript">
+	$(function(){
+        initq();
+		$('#ff').form({
+			success:function(data){
+				$.messager.alert('提示', data);
+			}
+		});
+	});
+	function initq() {
+        $.post("zk/queryZnodeInfo", { "path": getQueryString("path"), "cacheId": getQueryString("cacheId")},
+            function(data){
+                console.log(data);
+                $("#r_path").val(data.path);
+                $("#r_cacheId").val(data.cacheId);
+                $("#r_data").val(data.data);
+                $("#r_czxid").text(data.arr.czxid);
+                $("#r_mzxid").text(data.arr.mzxid);
+                $("#r_ctime").text(data.arr.ctime);
+                $("#r_mtime").text(data.arr.mtime);
+                $("#r_version").text(data.arr.version);
+                $("#r_cversion").text(data.arr.cversion);
+                $("#r_ephemeralOwner").text(data.arr.ephemeralOwner);
+                $("#r_aversion").text(data.arr.aversion);
+                $("#r_dataLength").text(data.arr.dataLength);
+                $("#r_numChildren").text(data.arr.numChildren);
+                $("#r_pzxid").text(data.arr.pzxid);
+                var html='';
+                var datas = data.acls;
+                for(var i=0;i<datas.length;i++){
+                    var dat = datas[i];
+                    html+='<tr>\n' +
+                        '\t\t\t\t\t\t<td><label >scheme</label></td>\n' +
+                        '\t\t\t\t\t\t<td>'+dat.scheme+'</td>\n' +
+                        '\t\t\t\t\t</tr>\n' +
+                        '\t\t\t\t\t<tr>\n' +
+                        '\t\t\t\t\t\t<td><label >id</label></td>\n' +
+                        '\t\t\t\t\t\t<td>'+dat.id+'</td>\n' +
+                        '\t\t\t\t\t</tr>\n' +
+                        '\t\t\t\t\t<tr>\n' +
+                        '\t\t\t\t\t\t<td><label >perms</label></td>\n' +
+                        '\t\t\t\t\t\t<td>'+dat.perms+'</td>\n' +
+                        '\t\t\t\t\t</tr>';
+                }
+                $("#r_table").append(html);
+            }
+        );
+    }
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+</script>
+</head>
+<body>
+    <form id="ff" action="zk/saveData" method="post">
+    <input id = "r_path" type="hidden" value="${path}" name="path" />
+    <input id = "r_cacheId" type="hidden" value="${cacheId}" name="cacheId" />
+	<div>
+		<table id = "r_table">
+			<tr>
+				<td><label >data：</label></td>
+				<td>
+				<textarea id = "r_data" rows="5" cols="40" name="data"></textarea>
+			</tr>
+			<tr>
+				<td><label >czxid：</label></td>
+				<td id ="r_czxid"></td>
+			</tr>
+			<tr>
+				<td><label >mzxid：</label></td>
+				<td id ="r_mzxid"></td>
+			</tr>
+			<tr>
+				<td><label >ctime：</label></td>
+				<td id ="r_ctime"></td>
+			</tr>
+			<tr>
+				<td><label >mtime：</label></td>
+				<td id ="r_mtime"></td>
+			</tr>
+			<tr>
+				<td><label >version：</label></td>
+				<td id ="r_version"></td>
+			</tr>
+			<tr>
+				<td><label >cversion：</label></td>
+				<td id ="r_cversion"></td>
+			</tr>
+			<tr>
+				<td><label >aversion：</label></td>
+				<td id ="r_aversion"></td>
+			</tr>
+			<tr>
+				<td><label >ephemeralOwner：</label></td>
+				<td id ="r_ephemeralOwner"></td>
+			</tr>
+			<tr>
+				<td><label >dataLength：</label></td>
+				<td id ="r_dataLength"></td>
+			</tr>
+			<tr>
+				<td><label >numChildren：</label></td>
+				<td id ="r_numChildren"></td>
+			</tr>
+			<tr>
+				<td><label >pzxid：</label></td>
+				<td id ="r_pzxid"></td>
+			</tr>
+		</table>
+	</div>
+	<br/>
+	<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="javascript:$('#ff').submit();">保存</a>
+	</form>
+</body>
+</html>
