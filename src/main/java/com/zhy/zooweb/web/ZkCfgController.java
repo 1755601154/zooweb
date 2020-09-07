@@ -56,7 +56,7 @@ public class ZkCfgController {
                 sessiontimeout = sessiontimeout + 000;
             }
             Integer.parseInt(sessiontimeout);
-            if (!Pattern.compile("(\\d+\\.\\d+\\.\\d+\\.\\d+):(\\d+)").matcher(connectstr).find()) return "添加失败";
+            //if (!Pattern.compile("(\\d+\\.\\d+\\.\\d+\\.\\d+):(\\d+)").matcher(connectstr).find()) return "添加失败";
             String id = UUID.randomUUID().toString().replaceAll("-", "");
             if (zkCfgManager.add(id, des, connectstr, sessiontimeout))
                 ZkCache.put(id, ZkManagerImpl.createZk().connect(connectstr, Integer.parseInt(sessiontimeout)));
